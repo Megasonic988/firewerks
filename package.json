@@ -1,0 +1,19 @@
+{
+  "name": "firewerk",
+  "version": "0.0.0",
+  "description": "Fireworks-themed multiplayer web game.",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Megasonic988/firewerks.git"
+  },
+  "author": "Kevin Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Megasonic988/firewerks/issues"
+  },
+  "homepage": "https://github.com/Megasonic988/firewerks#readme"
+}
