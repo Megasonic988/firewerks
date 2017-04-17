@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const port = process.env.PORT || 8080;
 
 let idCount = 0;
 let time = new Date();
@@ -84,7 +85,7 @@ setInterval(function() {
 	});
 }, 20);
 
-http.listen(8080, function() {
+http.listen(port, function() {
 	console.log("Server listening on port 8080.");
 });
 
