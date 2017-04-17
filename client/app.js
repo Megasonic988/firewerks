@@ -6,7 +6,8 @@ const stage = new PIXI.Container();
 const renderer = PIXI.autoDetectRenderer(512, 512);
 document.body.appendChild(renderer.view);
 
-let player;
+let playerId;
+let time = new Date();
 
 function drawPlayer(x, y) {
   let p = new PIXI.Graphics();
@@ -18,18 +19,25 @@ function drawPlayer(x, y) {
   return p;
 }
 
-function setup() {
+socket.on('connect', function() {
+  playerId = socket.id;
+  console.log("Connected with player ID: " + socket.id);
+});
 
-  player = drawPlayer(256, 256);
-  stage.addChild(player);
+socket.on('gameState', function(gameState) {
+  requestAnimationFrame(function() {
+    renderGame(gameState);
+  });
+  socket.emit('input', renderer.plugins.interaction.mouse.global);
+});
 
-  gameLoop();
-}
-
-function gameLoop() {
-  requestAnimationFrame(gameLoop);
-
+function renderGame(gameState) {
+  stage.removeChildren();
+  gameState.players.forEach(p => {
+    stage.addChild(drawPlayer(p.position.x, p.position.y));
+  });
+  const newTime = new Date();
+  const delta_t = newTime - time;
+  time = newTime;
   renderer.render(stage);
 }
-
-setup();

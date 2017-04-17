@@ -4,10 +4,12 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 let idCount = 0;
+let time = new Date();
 
 const GameState = {
 	players: [],
-	projectiles: []
+	projectiles: [],
+  mapSize: [512, 512]
 };
 
 class Vector {
@@ -31,12 +33,13 @@ class Player {
 		});
 
 		socket.on('input', input => {
-			this.lastPlayerInput = input;
+			this.playerInput = input;
 		});
 	}
 
 	handlePlayerInput() {
-
+    this.position.x = this.playerInput.x;
+    this.position.y = this.playerInput.y;
 	}
 }
 
@@ -71,12 +74,15 @@ function formatGameState() {
 }
 
 setInterval(function() {
+  let newTime = new Date();
+  const delta_t = newTime - time;
+  time = newTime;
 	GameState.players = GameState.players.filter(p => p.connected);
 	GameState.players.forEach(function(p) {
 		p.socket.emit('gameState', formatGameState());
-		p.handlePlayerInput();
+		if (p.playerInput) p.handlePlayerInput();
 	});
-}, 33);
+}, 20);
 
 http.listen(8080, function() {
 	console.log("Server listening on port 8080.");
